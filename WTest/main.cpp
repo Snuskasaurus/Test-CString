@@ -69,14 +69,14 @@ void my_free(void* pointer)
 class CString
 {
 public:
-	CString() 
+	CString()
 	{
-		m_storage = nullptr; 
+		m_storage = nullptr;
 	};
 
-	CString(const CString& _str) 
+	CString(const CString& _str)
 	{
-		m_storage = my_strcpy(_str.m_storage); 
+		m_storage = my_strcpy(_str.m_storage);
 	}
 
 	CString(const char* _str)
@@ -149,7 +149,21 @@ public:
 		return true;
 	}
 
-	inline bool operator<(const CString& _str) const { return this->size() < _str.size(); }
+	inline bool operator<(const CString& _str) const // Use alphabetical order
+	{
+		if (nullptr == this->m_storage) return true;
+		if (nullptr == _str.m_storage) return false;
+
+		size_t sizeThis = this->size();
+		size_t sizeOther = _str.size();
+		size_t usedSize = (sizeThis < sizeOther) ? sizeThis : sizeOther;
+		for (size_t i = 0; i < usedSize + 1; i++)
+		{
+			if (this->m_storage[i] == _str.m_storage[i]) continue;
+			else return this->m_storage[i] < _str.m_storage[i];
+		}
+		return false;
+	}
 
 	friend std::ostream& operator<<(std::ostream& _stream, const CString& _str)
 	{
@@ -331,5 +345,3 @@ int main()
 	system("pause");
 	return 0;
 };
-
-
